@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: compage_module
+  name: compage_module
+  labels:
+    app: compage_module
+spec:
+  selector:
+    matchLabels:
+      app: compage_module
+  template:
+    metadata:
+      labels:
+        app: compage_module
+        name: compage_module
+    spec:
+      containers:
+        - name: compage_module
+          image: bheemeshkammak/compage_module/compage_module
+          imagePullPolicy: Always
+        
+          env:
+            - name: SERVICE_NAME
+              value: "go-app"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "localhost:4317"
+            - name: INSECURE_MODE
+              value: "true"
+        
+          ports:
+        
+        
+          - containerPort: 5678
+            name: http
+        
+        
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 30
+        
